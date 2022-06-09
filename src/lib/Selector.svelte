@@ -4,11 +4,19 @@
   export let colour: string;
   export let limit: number = 3;
 
+  import { darken, setLightness } from 'polished';
   import { flip } from 'svelte/animate';
   import { quintOut } from 'svelte/easing';
   import { crossfade } from 'svelte/transition';
   import { moveOption, Option } from './stores/options/options.utils';
 
+  //////////////// colours ////////////////
+  const unselectedColour = colour;
+  const unselectedButton = setLightness(0.75, colour);
+  const selectedColour = darken(0.1, colour);
+  const selectedButton = darken(0.5, colour);
+
+  //////////////// animation ////////////////
   const [send, receive] = crossfade({
     duration: 200,
     easing: quintOut,
@@ -28,6 +36,7 @@
     },
   });
 
+  //////////////// methods ////////////////
   function selectOption(optionId: number) {
     const [newUnSelected, newSelected] = moveOption(
       options,
@@ -48,7 +57,10 @@
   }
 </script>
 
-<section class={`unselected ${colour}`}>
+<section
+  class="unselected"
+  style="--unselected:{unselectedColour}; --unselected-btn:{unselectedButton};"
+>
   {#each options as nameOption (nameOption.id)}
     <button
       in:receive={{ key: nameOption.id }}
@@ -62,7 +74,10 @@
   {/each}
 </section>
 
-<section class={`selected ${colour}`}>
+<section
+  class="selected"
+  style="--selected:{selectedColour}; --selected-btn:{selectedButton};"
+>
   {#each selectedOptions as selected (selected.id)}
     <button
       in:receive={{ key: selected.id }}
@@ -88,50 +103,22 @@
       color: rgb(255, 255, 255);
       font-weight: 700;
       min-width: 50px;
-      border: 1px solid hsla(0, 0%, 0%, 0.197);
+      border: 1px solid hsla(0, 0%, 0%, 0.3);
       padding: 3px 8px;
       border-radius: 4px;
       transition: all 70s;
     }
 
     &.unselected {
-      &.reddish {
-        background-color: hsla(0, 80%, 91%, 0.512);
-        & > button {
-          background-color: hsla(0, 80%, 85%, 1);
-        }
-      }
-      &.washed {
-        background-color: hsla(230, 13%, 91%, 0.512);
-        & > button {
-          background-color: hsla(230, 13%, 85%, 1);
-        }
-      }
-      &.blueish {
-        background-color: hsla(230, 80%, 91%, 0.512);
-        & > button {
-          background-color: hsla(230, 80%, 85%, 1);
-        }
+      background-color: var(--unselected);
+      & > button {
+        background-color: var(--unselected-btn);
       }
     }
     &.selected {
-      &.reddish {
-        background-color: hsla(0, 80%, 91%, 0.812);
-        & > button {
-          background-color: hsla(0, 80%, 65%, 1);
-        }
-      }
-      &.washed {
-        background-color: hsla(230, 13%, 91%, 0.812);
-        & > button {
-          background-color: hsla(230, 13%, 65%, 1);
-        }
-      }
-      &.blueish {
-        background-color: hsla(230, 80%, 91%, 0.812);
-        & > button {
-          background-color: hsla(230, 80%, 65%, 1);
-        }
+      background-color: var(--selected);
+      & > button {
+        background-color: var(--selected-btn);
       }
     }
   }
