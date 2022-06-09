@@ -50,7 +50,8 @@
     overflow-y: scroll;
 
     padding: 1rem;
-    background-color: rgb(149, 152, 154);
+    background-color: rgba(255, 255, 255, 0.865);
+    backdrop-filter: blur(3px);
   }
 
   button {

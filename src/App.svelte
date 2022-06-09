@@ -20,7 +20,8 @@
 
 <HelpBar />
 <main>
-  <!-- <h1>Sticky Pills</h1>
+  <h1>Sticky Pills</h1>
+  <!--
 
   <section>
     <h2>menu</h2>
@@ -28,7 +29,8 @@
       <li>play</li>
       <li>rules</li>
     </ul>
-  </section> -->
+  </section>
+  -->
 
   <Selector
     options={nameOptions}
