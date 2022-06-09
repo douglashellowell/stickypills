@@ -1,8 +1,17 @@
 <script lang="ts">
+  import CureMethod from './sections/CureMethod.svelte';
+  import DrugNameFragment from './sections/DrugNameFragment.svelte';
+  import SideEffect from './sections/SideEffect.svelte';
 </script>
 
 <div>
-  <p>drug name fragment</p>
-  <p>Main-Effect</p>
-  <p>Side-Effect</p>
+  <DrugNameFragment />
+  <CureMethod />
+  <SideEffect />
 </div>
+
+<style>
+  div {
+    border: 1px solid grey;
+  }
+</style>
