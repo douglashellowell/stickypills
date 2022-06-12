@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
+  import db from './firebase/firebase';
   import HelpBar from './lib/HelpBar/HelpBar.svelte';
+  import JoinRoom from './lib/JoinRoom.svelte';
   import Selector from './lib/Selector.svelte';
   import type { Option } from './lib/stores/options/options.utils';
   import {
@@ -8,6 +11,73 @@
     getRandomNameFragment,
     getRandomSideEffect,
   } from './lib/stores/options/options.utils';
+
+  ///////////// state /////////////
+  let username: null | string = 'bob';
+  let roomData = [];
+  /////////////////////////////////
+
+  /////////////////ROUTING//////////////
+  let page: string;
+  let isHomePage: boolean;
+  let roomCode: string;
+
+  $: page = window.location.pathname;
+
+  function navigateTo(path: string) {
+    window.location.href = window.location.origin + path;
+  }
+  console.log(window.location);
+
+  //////////////////////////////////////
+
+  /////////// lifecycle ///////////
+
+  ///////////////generateRoom//////////////////
+  function generateRoomCode(): string {
+    const lettersInAlphabet = 26;
+    const unicodeOffset = 65;
+    const codeLength = 4;
+
+    let roomCode = '';
+    for (let i = 0; i < codeLength; i++) {
+      roomCode += String.fromCharCode(
+        Math.floor(Math.random() * lettersInAlphabet) + unicodeOffset
+      );
+    }
+    return roomCode;
+  }
+  ///////////create room ////////////////
+  async function createRoom(roomCode: string) {
+    try {
+      const gamesRef = collection(db, 'games');
+      await setDoc(doc(gamesRef, roomCode), {
+        players: [],
+      });
+      console.log(`doc ${roomCode} written`);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  }
+  //////////////////joinRoom/////////////////
+  function joinRoom(username: string, roomCode: string) {
+    // games
+    // roomcode
+    type Card = { type: string; text: string };
+    const newUser: { name: string; cards: Card[] } = {
+      name: username,
+      cards: [],
+    };
+
+    const gamesRef = doc(db, 'games', roomCode);
+    setDoc(gamesRef, {
+      players: [newUser],
+    });
+
+    const unsub = onSnapshot(doc(db, 'games', roomCode), (doc) => {
+      console.log('from live data: ', doc.data());
+    });
+  }
 
   const nameOptions = generateOptions(5, getRandomNameFragment);
   const cureOptions = generateOptions(3, getRandomCureMethod);
@@ -21,6 +91,13 @@
 <HelpBar />
 <main>
   <h1>Sticky Pills</h1>
+  <span>
+    {#await roomCode}
+      creating room...
+    {:then code}
+      {code}
+    {/await}
+  </span>
   <!--
 
   <section>
@@ -31,6 +108,8 @@
     </ul>
   </section>
   -->
+
+  <JoinRoom on:joinRoom={(e) => console.log(e.detail)} />
 
   <Selector
     options={nameOptions}
@@ -66,5 +145,6 @@
   }
   main {
     margin: 0 auto;
+    width: min(95%, 500px);
   }
 </style>

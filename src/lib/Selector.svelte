@@ -103,7 +103,8 @@
       color: rgb(255, 255, 255);
       font-weight: 700;
       min-width: 50px;
-      border: 1px solid hsla(0, 0%, 0%, 0.3);
+      border: 1px solid hsla(0, 100%, 90%, 0.3);
+      /* border: 1px solid hsla(0, 0%, 0%, 0.3); */
       padding: 3px 8px;
       border-radius: 4px;
       transition: all 70s;

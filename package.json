@@ -24,6 +24,7 @@
     "vitest": "^0.14.1"
   },
   "dependencies": {
+    "firebase": "^9.8.2",
     "polished": "^4.2.2"
   }
 }
