@@ -2,7 +2,6 @@
   import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore';
   import db from './firebase/firebase';
   import HelpBar from './lib/HelpBar/HelpBar.svelte';
-  import JoinRoom from './lib/JoinRoom.svelte';
   import Selector from './lib/Selector.svelte';
   import type { Option } from './lib/stores/options/options.utils';
   import {
@@ -11,6 +10,7 @@
     getRandomNameFragment,
     getRandomSideEffect,
   } from './lib/stores/options/options.utils';
+  import RoomTabs from './LoginSelect/RoomTabs.svelte';
 
   ///////////// state /////////////
   let username: null | string = 'bob';
@@ -90,14 +90,6 @@
 
 <HelpBar />
 <main>
-  <h1>Sticky Pills</h1>
-  <span>
-    {#await roomCode}
-      creating room...
-    {:then code}
-      {code}
-    {/await}
-  </span>
   <!--
 
   <section>
@@ -108,8 +100,8 @@
     </ul>
   </section>
   -->
-
-  <JoinRoom on:joinRoom={(e) => console.log(e.detail)} />
+  <RoomTabs />
+  <!-- <JoinRoom on:joinRoom={(e) => console.log(e.detail)} /> -->
 
   <Selector
     options={nameOptions}

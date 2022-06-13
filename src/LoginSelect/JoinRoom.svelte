@@ -15,12 +15,9 @@
   setInterval(() => {
     placeholderText = placeholderText === 'ROOM' ? 'CODE' : 'ROOM';
   }, 1000);
-
-  let show = false;
-  const flipShow = () => (show = !show);
 </script>
 
-<button on:click={flipShow}>flip</button>
+<h2>Join Room</h2>
 <form
   on:submit|preventDefault={() =>
     dispatch('joinRoom', { usernameInput, roomCodeInput })}
@@ -43,9 +40,6 @@
     />
     <div id="character-flexer">
       {#each roomCodeInput.split('') as codeCharacter, i (i)}
-        <!-- {#if show} -->
-        <!-- <span transition:scale>{roomCodeInput}</span> -->
-        <!-- {/if} -->
         <p transition:slide>{codeCharacter}</p>
       {/each}
     </div>
@@ -75,10 +69,13 @@
       height: var(--inputHeight);
       background-color: rgb(77, 137, 24);
       color: hsla(0, 0%, 0%, 0.304);
-      box-shadow: inset 0 0 10px hsla(92, 100%, 10%, 0.6);
+      box-shadow: inset 0 10px 10px hsla(92, 100%, 10%, 0.6);
       caret-color: hsla(92, 100%, 10%, 0.6);
       border: 4px groove hsla(92, 100%, 10%, 1.6);
       border-radius: 1rem 1rem 0 0;
+      &:focus {
+        outline: none;
+      }
     }
     & > input::placeholder {
       font-family: 'Syne Mono', monospace;
